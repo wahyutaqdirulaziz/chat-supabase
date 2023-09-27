@@ -35,11 +35,9 @@ class _ChatPageState extends State<ChatPage> {
     final myUserId = supabase.auth.currentUser!.id;
     _messagesStream = supabase
         .from('messages')
-        .select('*')
-        .eq('received_id', widget.id)
-
+        .stream(primaryKey: ['id'])
         .order('created_at')
-        .asStream()
+        .eq('received_id', widget.id)
         .map((maps) => maps
             .map((map) => Message.fromMap(map: map, myUserId: myUserId))
             .toList());
