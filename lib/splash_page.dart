@@ -4,7 +4,6 @@ import 'package:chatapp/list_account.dart';
 import 'package:chatapp/register_page.dart';
 import 'package:flutter/material.dart';
 
-
 /// Page to redirect users to the appropriate page depending on the initial auth state
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -30,7 +29,7 @@ class SplashPageState extends State<SplashPage> {
           .pushAndRemoveUntil(RegisterPage.route(), (route) => false);
     } else {
       Navigator.of(context)
-          .pushAndRemoveUntil(ListAccountView.route(), (route) => false);
+          .pushAndRemoveUntil(RegisterPage.route(), (route) => false);
     }
   }
 

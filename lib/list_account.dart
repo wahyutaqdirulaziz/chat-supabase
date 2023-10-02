@@ -51,29 +51,34 @@ class _ListAccountViewState extends State<ListAccountView> {
                 : ListView.builder(
                     itemCount: profile.length,
                     itemBuilder: (context, index) {
-                      final message = profile[index];
+                      if (supabase.auth.currentUser!.id == profile[index].id) {
+                        return SizedBox();
+                      } else {
+                        final message = profile[index];
 
-                      /// I know it's not good to include code that is not related
-                      /// to rendering the widget inside build method, but for
-                      /// creating an app quick and dirty, it's fine 😂
-                      // _loadProfileCache(message.profileId);
+                        /// I know it's not good to include code that is not related
+                        /// to rendering the widget inside build method, but for
+                        /// creating an app quick and dirty, it's fine 😂
+                        // _loadProfileCache(message.profileId);
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChatPage(
-                                      id: message.id.toString(),
-                                    )),
-                          );
-                        },
-                        child: Card(
-                          child: ListTile(
-                            title: Text(message.username),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatPage(
+                                        id: message.id.toString(),
+                                        username: message.username,
+                                      )),
+                            );
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text(message.username),
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                   );
           } else {

@@ -8,12 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart';
 
+// ignore: must_be_immutable
 /// Page to chat with someone.
 ///
 /// Displays chat bubbles as a ListView and TextField to enter new chat.
 class ChatPage extends StatefulWidget {
   String? id;
-  ChatPage({Key? key, this.id}) : super(key: key);
+  String? username;
+  ChatPage({
+    Key? key,
+    this.id,
+    this.username,
+  }) : super(key: key);
 
   // static Route<void> route() {
   //   return MaterialPageRoute(
@@ -37,9 +43,11 @@ class _ChatPageState extends State<ChatPage> {
         .from('messages')
         .stream(primaryKey: ['id'])
         .order('created_at')
-        .eq('received_id', widget.id)
+        .eq('room_id', widget.id.toString() + myUserId)
         .map((maps) => maps
-            .map((map) => Message.fromMap(map: map, myUserId: myUserId))
+            .map(
+              (map) => Message.fromMap(map: map, myUserId: myUserId),
+            )
             .toList());
   }
 
@@ -58,12 +66,13 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chat')),
+      appBar: AppBar(title: Text(widget.username.toString())),
       body: StreamBuilder<List<Message>>(
         stream: _messagesStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final messages = snapshot.data!;
+
             return Column(
               children: [
                 Expanded(
@@ -80,7 +89,7 @@ class _ChatPageState extends State<ChatPage> {
                             /// I know it's not good to include code that is not related
                             /// to rendering the widget inside build method, but for
                             /// creating an app quick and dirty, it's fine 😂
-                            _loadProfileCache(message.profileId);
+                            //_loadProfileCache(message.profileId);
 
                             return _ChatBubble(
                               message: message,
@@ -97,8 +106,8 @@ class _ChatPageState extends State<ChatPage> {
           } else {
             return Column(
               children: [
-                Expanded(
-                    child: const Center(
+                const Expanded(
+                    child: Center(
                   child: Text('Start your conversation now :)'),
                 )),
                 _MessageBar(
@@ -183,10 +192,13 @@ class _MessageBarState extends State<_MessageBar> {
         'profile_id': myUserId,
         'received_id': id,
         'content': text,
+        'room_id': widget.id.toString() + myUserId
       });
     } on PostgrestException catch (error) {
+      // ignore: use_build_context_synchronously
       context.showErrorSnackBar(message: error.message);
     } catch (_) {
+      // ignore: use_build_context_synchronously
       context.showErrorSnackBar(message: unexpectedErrorMessage);
     }
   }

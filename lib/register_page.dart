@@ -41,11 +41,14 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       await supabase.auth.signUp(
           email: email, password: password, data: {'username': username});
+      // ignore: use_build_context_synchronously
       Navigator.of(context)
           .pushAndRemoveUntil(ListAccountView.route(), (route) => false);
     } on AuthException catch (error) {
+      // ignore: use_build_context_synchronously
       context.showErrorSnackBar(message: error.message);
     } catch (error) {
+      // ignore: use_build_context_synchronously
       context.showErrorSnackBar(message: unexpectedErrorMessage);
     }
   }
@@ -101,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (val == null || val.isEmpty) {
                   return 'Required';
                 }
-                final isValid = RegExp(r'^[A-Za-z0-9_]{3,24}$').hasMatch(val);
+                final isValid = RegExp(r'^[A-Za-z0-9_]{3,50}$').hasMatch(val);
                 if (!isValid) {
                   return '3-24 long with alphanumeric or underscore';
                 }
