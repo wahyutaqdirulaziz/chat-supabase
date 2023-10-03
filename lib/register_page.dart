@@ -39,8 +39,12 @@ class _RegisterPageState extends State<RegisterPage> {
     final password = _passwordController.text;
     final username = _usernameController.text;
     try {
-      await supabase.auth.signUp(
-          email: email, password: password, data: {'username': username});
+      await supabase.auth.signUp(email: email, password: password, data: {
+        'username': username,
+        'role': 'RM',
+        'sales-id': null,
+        'email': email
+      });
       // ignore: use_build_context_synchronously
       Navigator.of(context)
           .pushAndRemoveUntil(ListAccountView.route(), (route) => false);
@@ -100,14 +104,12 @@ class _RegisterPageState extends State<RegisterPage> {
               decoration: const InputDecoration(
                 label: Text('Username'),
               ),
+              maxLength: 50,
               validator: (val) {
                 if (val == null || val.isEmpty) {
                   return 'Required';
                 }
-                final isValid = RegExp(r'^[A-Za-z0-9_]{3,50}$').hasMatch(val);
-                if (!isValid) {
-                  return '3-24 long with alphanumeric or underscore';
-                }
+
                 return null;
               },
             ),
