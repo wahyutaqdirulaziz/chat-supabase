@@ -1,6 +1,7 @@
 import 'package:chatapp/app.dart';
 import 'package:chatapp/splash_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'My Chat App',
       theme: appTheme,

@@ -6,6 +6,7 @@ class Message {
     required this.createdAt,
     required this.isMine,
     required this.received_id,
+     required this.message_type,
     required this.roomId,
   });
 
@@ -25,6 +26,7 @@ class Message {
   final bool isMine;
 
   final String received_id;
+    final String message_type;
 
   final String roomId;
 
@@ -37,5 +39,6 @@ class Message {
         content = map['content'],
         createdAt = DateTime.parse(map['created_at']),
         isMine = myUserId == map['profile_id'],
+        message_type = map['message_type'],
         roomId = map['room_id'];
 }
